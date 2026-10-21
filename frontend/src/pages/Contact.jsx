@@ -1,227 +1,241 @@
-
 import { useState } from "react";
 import {
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   Send,
-  CheckCircle,
 } from "lucide-react";
 
+import { sendContact } from "../api.js";
+import { motion } from "framer-motion";
+
 export default function Contact() {
-  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  const [busy, setBusy] = useState(false);
 
-    setSent(true);
-    event.currentTarget.reset();
+  const [notice, setNotice] = useState({
+    type: "",
+    text: "",
+  });
+
+  function change(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   }
 
+  async function submit(e) {
+    e.preventDefault();
+
+    setBusy(true);
+    setNotice({
+      type: "",
+      text: "",
+    });
+
+    try {
+      const result = await sendContact(form);
+
+      setNotice({
+        type: "success",
+        text: result.message,
+      });
+
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      setNotice({
+        type: "error",
+        text:
+          err.response?.data?.message ||
+          "Could not send your message. Please try again.",
+      });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const contactInfo = [
+    {
+      Icon: Mail,
+      title: "Email",
+      body: "hello@tahasbite.example",
+    },
+    {
+      Icon: Phone,
+      title: "Phone",
+      body: "Contact us through your order details",
+    },
+    {
+      Icon: MapPin,
+      title: "Delivery",
+      body: "Free delivery on every order",
+    },
+    {
+      Icon: MessageCircle,
+      title: "Support",
+      body: "We love hearing your feedback",
+    },
+  ];
+
+  const inputClasses =
+    "mt-2 w-full rounded-xl border border-slate-300 " +
+    "bg-transparent px-3 py-3 font-normal outline-none " +
+    "focus:border-orange-500 dark:border-slate-700";
+
   return (
-    <section className="min-h-screen bg-orange-50/50 px-6 py-16 md:px-12 lg:py-20">
-      <div className="mx-auto max-w-7xl">
-        {/* Page Heading */}
-        <div className="mb-14 text-center">
-          <span className="text-xs font-bold tracking-[0.25em] text-orange-600">
-            SAY HELLO
-          </span>
+    <div className="mx-auto max-w-5xl">
+      {/* Hero Section */}
+      <section className="mb-8 rounded-[2rem] bg-slate-950 px-6 py-10 text-white sm:px-10">
+        <p className="text-sm font-bold uppercase tracking-[.2em] text-orange-300">
+          We're here for you
+        </p>
 
-          <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
-            Let’s <span className="text-orange-600">talk.</span>
-          </h1>
+        <h1 className="mt-2 text-4xl font-black sm:text-5xl">
+          Let's talk bites.
+        </h1>
 
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-gray-600 md:text-lg">
-            Questions, feedback, or just want to say hi?
-            We’re listening.
-          </p>
-        </div>
+        <p className="mt-3 max-w-xl text-slate-300">
+          Questions, feedback or a little love for the menu?
+          Send us a message.
+        </p>
+      </section>
 
-        {/* Contact Layout */}
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Contact Information */}
-          <div className="flex flex-col justify-center rounded-3xl bg-orange-600 p-8 text-white shadow-xl shadow-orange-100 md:p-10">
-            <span className="text-xs font-bold tracking-[0.2em] text-orange-100">
-              GET IN TOUCH
-            </span>
-
-            <h2 className="mt-4 text-3xl font-extrabold md:text-4xl">
-              We’d love to hear from you.
-            </h2>
-
-            <p className="mt-4 max-w-md leading-7 text-orange-50">
-              Have a question about our menu or an idea
-              to share? Reach out to the Tahas Bite team.
-            </p>
-
-            <div className="mt-10 space-y-7">
-              {/* Address */}
-              <article className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
-                  <MapPin size={23} />
-                </div>
-
-                <div>
-                  <h3 className="font-bold">Find us</h3>
-                  <p className="mt-1 text-sm text-orange-100">
-                    Faisalabad, Pakistan
-                  </p>
-                </div>
-              </article>
-
-              {/* Phone */}
-              <article className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
-                  <Phone size={23} />
-                </div>
-
-                <div>
-                  <h3 className="font-bold">Give us a call</h3>
-                  <p className="mt-1 text-sm text-orange-100">
-                    +92 300 0000000
-                  </p>
-                </div>
-              </article>
-
-              {/* Email */}
-              <article className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
-                  <Mail size={23} />
-                </div>
-
-                <div>
-                  <h3 className="font-bold">Drop us a line</h3>
-                  <p className="mt-1 break-all text-sm text-orange-100">
-                    hello@tahasbite.example
-                  </p>
-                </div>
-              </article>
-            </div>
-
-            <div className="mt-10 rounded-2xl border border-white/20 bg-white/10 p-4">
-              <p className="text-sm leading-6 text-orange-50">
-                Note: These contact details are placeholders
-                for this starter project. Replace them with
-                your actual business information.
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm md:p-10">
-            <h2 className="text-2xl font-extrabold text-gray-900 md:text-3xl">
-              Send a message
-            </h2>
-
-            <p className="mt-3 text-sm leading-6 text-gray-500">
-              Fill out the form below and let us know
-              what’s on your mind.
-            </p>
-
-            {/* Success Message */}
-            {sent && (
-              <div
-                role="status"
-                className="mt-6 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-800"
-              >
-                <CheckCircle
-                  size={21}
-                  className="mt-0.5 shrink-0"
-                />
-
-                <div>
-                  <h3 className="font-bold">
-                    Message submitted!
-                  </h3>
-
-                  <p className="mt-1 text-sm leading-5">
-                    Thanks for reaching out. This demo
-                    form was submitted locally.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <form
-              className="mt-8 space-y-6"
-              onSubmit={handleSubmit}
+      {/* Contact Information and Form */}
+      <div className="grid gap-6 lg:grid-cols-[.75fr_1.25fr]">
+        {/* Contact Information */}
+        <aside className="space-y-3">
+          {contactInfo.map(({ Icon, title, body }, index) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.08 * index }}
+              className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950"
             >
-              {/* Name */}
+              <span className="rounded-xl bg-orange-100 p-3 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                <Icon size={20} />
+              </span>
+
               <div>
-                <label
-                  htmlFor="contact-name"
-                  className="mb-2 block text-sm font-semibold text-gray-700"
-                >
-                  Your name
-                </label>
+                <p className="font-black">{title}</p>
 
-                <input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  placeholder="Enter your name"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-100"
-                />
+                <p className="mt-1 text-sm text-slate-500">
+                  {body}
+                </p>
               </div>
+            </motion.div>
+          ))}
+        </aside>
 
-              {/* Email */}
-              <div>
-                <label
-                  htmlFor="contact-email"
-                  className="mb-2 block text-sm font-semibold text-gray-700"
-                >
-                  Email address
-                </label>
+        {/* Contact Form */}
+        <form
+          onSubmit={submit}
+          className="space-y-4 rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 dark:border-slate-800 dark:bg-slate-950"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {/* Name */}
+            <label className="text-sm font-bold">
+              Your name
 
-                <input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-100"
-                />
-              </div>
+              <input
+                required
+                maxLength={100}
+                name="name"
+                value={form.name}
+                onChange={change}
+                className={inputClasses}
+              />
+            </label>
 
-              {/* Message */}
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="mb-2 block text-sm font-semibold text-gray-700"
-                >
-                  What’s on your mind?
-                </label>
+            {/* Email */}
+            <label className="text-sm font-bold">
+              Email address
 
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  required
-                  rows={5}
-                  placeholder="Write your message..."
-                  className="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-100"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-orange-600 px-7 py-4 font-bold text-white shadow-lg shadow-orange-100 transition hover:-translate-y-0.5 hover:bg-orange-700 active:translate-y-0"
-              >
-                Send message
-                <Send size={17} />
-              </button>
-
-              <p className="text-center text-xs leading-5 text-gray-400">
-                This starter form does not send messages
-                to a server or email address.
-              </p>
-            </form>
+              <input
+                required
+                type="email"
+                maxLength={150}
+                name="email"
+                value={form.email}
+                onChange={change}
+                className={inputClasses}
+              />
+            </label>
           </div>
-        </div>
+
+          {/* Subject */}
+          <label className="block text-sm font-bold">
+            Subject (optional)
+
+            <input
+              maxLength={150}
+              name="subject"
+              value={form.subject}
+              onChange={change}
+              className={inputClasses}
+            />
+          </label>
+
+          {/* Message */}
+          <label className="block text-sm font-bold">
+            Message
+
+            <textarea
+              required
+              minLength={5}
+              maxLength={2000}
+              rows={5}
+              name="message"
+              value={form.message}
+              onChange={change}
+              className={`${inputClasses} resize-y`}
+            />
+          </label>
+
+          {/* Success or Error Message */}
+          {notice.text && (
+            <p
+              role="status"
+              aria-live="polite"
+              className={`rounded-xl p-3 text-sm ${notice.type === "success"
+                ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
+                : "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-200"
+                }`}
+            >
+              {notice.text}
+            </p>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={busy}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3.5 font-bold text-white hover:bg-brand-600 disabled:opacity-60"
+          >
+            <Send size={18} />
+
+            {busy ? "Sending..." : "Send message"}
+          </button>
+        </form>
       </div>
-    </section>
+
+      {/* Loaction Section */}
+      <section className="mt-10 mb-8 w-full h-64 sm:h-72 lg:h-96 rounded-2xl overflow-hidden">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2859.384643237726!2d73.10750667472209!3d31.423419551927136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392268153fc0774d%3A0x7af0a06c3ac14097!2sChenab%20College%20of%20Advance%20Studies!5e1!3m2!1sen!2s!4v1792613466077!5m2!1sen!2s" width="100%" height="100%" loading="lazy"></iframe>
+      </section>
+    </div>
   );
 }

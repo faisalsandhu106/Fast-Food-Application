@@ -1,23 +1,20 @@
-
+import React from 'react'
+import { ArrowDownRight, ArrowRight, Flame, Leaf, Plus, ShoppingCart, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
-import {
-  ArrowDownRight,
-  ArrowRight,
-  Flame,
-  Leaf,
-  Truck,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { menuItems } from "../data/menuItems.js";
+import { useApp } from "../context/AppContext.jsx";
+import { motion } from "motion/react"
 
-import { menuItems } from "../data/menu.js";
-import ProductCard from "../components/ProductCard.jsx";
+const money = (value) => `Rs. ${Number(value).toLocaleString("en-PK")}`;
 
-export default function Home() {
+
+const Home = () => {
+  const { dispatch, cartCount } = useApp();
   return (
-    <>
+    <main>
       {/* Hero Section */}
-      <section className="overflow-hidden bg-orange-50">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:px-12 lg:py-24">
+      <section className="rounded-2xl overflow-hidden bg-orange-50 dark:bg-slate-950 transition-all duration-150">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-10 sm:py-14 lg:py-16 md:grid-cols-2 md:px-12">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -28,7 +25,7 @@ export default function Home() {
               FRESH OFF THE GRILL
             </span>
 
-            <h1 className="mt-6 text-5xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-6xl lg:text-7xl">
+            <h1 className="mt-6 text-5xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white md:text-6xl lg:text-7xl transition-all duration-150">
               Your cravings.
               <br />
               Our{" "}
@@ -37,7 +34,7 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-7 text-gray-600 md:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-7 text-gray-600 dark:text-gray-300 md:text-lg transition-all duration-150">
               Big, bold flavour made fresh. From crave-worthy
               burgers to golden, crispy sides — your next
               favourite bite is right here.
@@ -46,7 +43,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <Link
                 to="/menu"
-                className="inline-flex items-center gap-3 rounded-full bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition hover:-translate-y-1 hover:bg-orange-700"
+                className="inline-flex items-center gap-3 rounded-full bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg dark:shadow-md transition-all duration-300 hover:bg-orange-700 hover:gap-5"
               >
                 Explore the menu
                 <ArrowRight size={18} />
@@ -54,7 +51,7 @@ export default function Home() {
 
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 font-semibold text-gray-800 transition hover:text-orange-600"
+                className="inline-flex items-center gap-2 font-semibold text-gray-800 hover:text-orange-600 dark:text-gray-300 transition-all duration-150"
               >
                 Meet Tahas Bite
                 <ArrowDownRight size={17} />
@@ -76,7 +73,7 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col">
-                <strong className="text-sm text-gray-900">
+                <strong className="text-sm text-gray-900 dark:text-gray-400 transition-all duration-150">
                   Made for real cravings
                 </strong>
                 <small className="mt-1 text-xs text-gray-500">
@@ -165,82 +162,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Popular Products */}
-      <section
-        className="mx-auto max-w-7xl px-6 py-20 md:px-12"
-        id="popular"
-      >
-        <div className="mb-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div>
-            <span className="text-xs font-bold tracking-widest text-orange-600">
-              THE CROWD PLEASERS
-            </span>
-
-            <h2 className="mt-3 text-3xl font-extrabold text-gray-900 md:text-5xl">
-              Good bites.{" "}
-              <span className="text-orange-600">
-                Great nights.
-              </span>
-            </h2>
-
-            <p className="mt-4 text-gray-600">
-              Meet the menu favourites worth coming back for.
-            </p>
-          </div>
-
-          <Link
-            className="inline-flex items-center gap-2 font-semibold text-orange-600 transition hover:text-orange-700"
-            to="/menu"
-          >
-            View full menu
-            <ArrowRight size={17} />
-          </Link>
+      {/* Feadured Menu */}
+      <section id="menu" className="pt-12">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div><p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-600">Made fresh</p><h2 className="mt-1 text-3xl font-black">Our menu</h2></div>
+          <Link to="/cart" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 font-semibold dark:border-slate-700"><ShoppingCart size={18} /> Cart ({cartCount})</Link>
         </div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.15,
-              },
-            },
-          }}
-          className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {menuItems.slice(0, 3).map((item) => (
-            <motion.div
-              key={item.id}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  y: 25,
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                },
-              }}
-              transition={{ duration: 0.45 }}
-            >
-              <ProductCard item={item} />
-            </motion.div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {menuItems.map((item) => (
+            <article key={item.id} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-soft transition hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-950">
+              <figure className="flex h-56 items-center justify-center rounded-2xl bg-orange-50 text-7xl dark:bg-slate-800 bg-cover object-cover overflow-hidden"><img src={item.image} alt={item.category} /></figure>
+              <div className="mt-4 flex items-start justify-between gap-3">
+                <div><span className="text-xs font-bold uppercase tracking-wide text-brand-600">{item.category}</span><h3 className="mt-1 text-lg font-extrabold">{item.name}</h3></div>
+                {item.tag && <span className="rounded-full bg-orange-100 px-2 py-1 text-xs font-bold text-orange-800 dark:bg-orange-950 dark:text-orange-200">{item.tag}</span>}
+              </div>
+              <p className="mt-2 min-h-12 text-sm leading-6 text-slate-500 dark:text-slate-400">{item.description}</p>
+              <div className="mt-5 flex items-center justify-between">
+                <span className="text-lg font-black">{money(item.price)}</span>
+                <button onClick={() => dispatch({ type: "ADD_TO_CART", payload: item })} className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 font-bold text-white hover:bg-brand-600"><Plus size={18} /> Add</button>
+              </div>
+            </article>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* Final Call To Action */}
-      <section className="overflow-hidden bg-orange-100">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 lg:py-20">
+      <section className="mt-10 rounded-2xl overflow-hidden bg-orange-100 dark:bg-slate-950 transition-all duration-150">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 lg:pt-20">
           <div>
             <span className="text-xs font-bold tracking-widest text-orange-700">
               YOUR TABLE IS WAITING
             </span>
 
-            <h2 className="mt-4 text-4xl font-extrabold leading-tight text-gray-900 md:text-6xl">
+            <h2 className="mt-4 text-4xl font-extrabold leading-tight text-gray-900 md:text-6xl dark:text-white transition-all duration-150">
               Come hungry.
               <br />
               <span className="text-orange-600">
@@ -248,7 +202,7 @@ export default function Home() {
               </span>
             </h2>
 
-            <p className="mt-5 max-w-lg leading-7 text-gray-600">
+            <p className="mt-5 max-w-lg leading-7 text-gray-600 dark:text-gray-300 transition-all duration-150">
               Find your go-to comfort food and make every
               bite count.
             </p>
@@ -281,6 +235,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
+export default Home

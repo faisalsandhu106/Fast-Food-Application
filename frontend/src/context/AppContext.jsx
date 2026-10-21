@@ -1,36 +1,76 @@
-import { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import { appReducer, initialState } from './AppReducer.js';
+import { createContext, useContext, useEffect, useMemo, useReducer, useState } from "react";
 
 const AppContext = createContext(null);
+const CART_KEY = "tahas-bite-cart";
 
-function readSavedState() {
+function readCart() {
   try {
-    const user = JSON.parse(localStorage.getItem('tahas-bite-user') || 'null');
-    const cart = user?.email ? JSON.parse(localStorage.getItem(`tahas-bite-cart:${user.email}`) || '[]') : [];
-    return { user, cart };
+    const saved = localStorage.getItem(CART_KEY);
+    return saved ? JSON.parse(saved) : [];
   } catch {
-    return initialState;
+    return [];
+  }
+}
+
+const initialState = { cart: readCart() };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "ADD_TO_CART": {
+      const product = action.payload;
+      const existing = state.cart.find((item) => item.id === product.id);
+      const cart = existing
+        ? state.cart.map((item) => item.id === product.id ? { ...item, quantity: Math.min(item.quantity + 1, 99) } : item)
+        : [...state.cart, { ...product, quantity: 1 }];
+      return { ...state, cart };
+    }
+    case "UPDATE_QUANTITY": {
+      const quantity = Number(action.payload.quantity);
+      if (!Number.isInteger(quantity) || quantity < 1) {
+        return { ...state, cart: state.cart.filter((item) => item.id !== action.payload.id) };
+      }
+      return {
+        ...state,
+        cart: state.cart.map((item) => item.id === action.payload.id ? { ...item, quantity: Math.min(quantity, 99) } : item),
+      };
+    }
+    case "REMOVE_FROM_CART":
+      return { ...state, cart: state.cart.filter((item) => item.id !== action.payload) };
+    case "CLEAR_CART":
+      return { ...state, cart: [] };
+    default:
+      return state;
   }
 }
 
 export function AppProvider({ children }) {
-  const [state, dispatch] = useReducer(appReducer, undefined, readSavedState);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [theme, setTheme] = useState(() => localStorage.getItem("tahas-bite-theme") || "light");
 
   useEffect(() => {
-    if (state.user) {
-      localStorage.setItem('tahas-bite-user', JSON.stringify(state.user));
-      localStorage.setItem(`tahas-bite-cart:${state.user.email}`, JSON.stringify(state.cart));
-    } else {
-      localStorage.removeItem('tahas-bite-user');
-    }
-  }, [state.user, state.cart]);
+    localStorage.setItem(CART_KEY, JSON.stringify(state.cart));
+  }, [state.cart]);
 
-  const value = useMemo(() => ({ ...state, dispatch, cartCount: state.cart.reduce((sum, item) => sum + item.quantity, 0), cartTotal: state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0) }), [state]);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("tahas-bite-theme", theme);
+  }, [theme]);
+
+  const cartTotal = useMemo(
+    () => state.cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0),
+    [state.cart]
+  );
+  const cartCount = useMemo(
+    () => state.cart.reduce((sum, item) => sum + item.quantity, 0),
+    [state.cart]
+  );
+
+  const value = { cart: state.cart, dispatch, cartTotal, cartCount, theme, setTheme };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 export function useApp() {
   const context = useContext(AppContext);
-  if (!context) throw new Error('useApp must be used inside AppProvider');
+  if (!context) throw new Error("useApp must be used inside AppProvider.");
   return context;
 }

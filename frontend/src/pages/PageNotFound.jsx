@@ -2,9 +2,9 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
 
-export default function NotFound() {
+export default function PageNotFound() {
   return (
-    <section className="flex min-h-[75vh] items-center justify-center bg-orange-50 px-6 py-16">
+    <section className="flex min-h-[75vh] items-center justify-center px-6 py-16">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         {/* Illustration */}
         <div className="relative flex h-48 w-48 items-center justify-center rounded-full bg-orange-100">
@@ -24,11 +24,11 @@ export default function NotFound() {
           404 — PAGE NOT FOUND
         </span>
 
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-white transition-all duration-150">
           Oops, wrong bite.
         </h1>
 
-        <p className="mt-4 max-w-sm text-base leading-7 text-gray-600">
+        <p className="mt-4 max-w-sm text-base leading-7 text-gray-600 dark:text-gray-400 transition-all duration-150">
           We couldn't find that page. It may have moved
           or the link might be incorrect.
         </p>
@@ -36,7 +36,7 @@ export default function NotFound() {
         {/* Back Home */}
         <Link
           to="/"
-          className="mt-8 inline-flex items-center gap-3 rounded-full bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg shadow-orange-200 transition hover:-translate-y-1 hover:bg-orange-700"
+          className="mt-8 inline-flex items-center gap-3 rounded-full bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-700"
         >
           <Home size={19} />
           Back home
@@ -45,7 +45,7 @@ export default function NotFound() {
 
         <Link
           to="/menu"
-          className="mt-5 font-semibold text-gray-600 transition hover:text-orange-600"
+          className="mt-5 font-semibold text-gray-600 hover:text-orange-600 dark:text-gray-400 transition-all duration-150"
         >
           Or explore our menu
         </Link>

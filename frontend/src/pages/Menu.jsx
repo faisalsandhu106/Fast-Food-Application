@@ -1,156 +1,287 @@
 
-import { useMemo, useState } from "react";
-import { Search, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+    Search,
+    Plus,
+    SlidersHorizontal,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-import ProductCard from "../components/ProductCard.jsx";
-import { menuItems } from "../data/menu.js";
+import { useApp } from "../context/AppContext.jsx";
+import { fetchProducts } from "../api.js";
+import { menuItems as fallbackItems } from "../data/menuItems.js";
 
-export default function Menu() {
-  const [category, setCategory] = useState("All");
-  const [search, setSearch] = useState("");
+// Format prices in Pakistani Rupees
+const money = (n) =>
+    `Rs. ${Number(n || 0).toLocaleString("en-PK")}`;
 
-  const categories = [
-    "All",
-    ...new Set(menuItems.map((item) => item.category)),
-  ];
 
-  const filteredItems = useMemo(() => {
-    const searchTerm = search.trim().toLowerCase();
+const Menu = () => {
+    const { dispatch } = useApp();
 
-    return menuItems.filter((item) => {
-      const matchesCategory =
-        category === "All" || item.category === category;
+    const [items, setItems] = useState(fallbackItems);
+    const [query, setQuery] = useState("");
+    const [category, setCategory] = useState("All");
+    const [sort, setSort] = useState("featured");
+    const [error, setError] = useState("");
 
-      const matchesSearch =
-        `${item.name} ${item.description}`
-          .toLowerCase()
-          .includes(searchTerm);
+    // Fetch products from the backend
+    useEffect(() => {
+        let cancelled = false;
 
-      return matchesCategory && matchesSearch;
-    });
-  }, [category, search]);
+        async function loadProducts() {
+            try {
+                const rows = await fetchProducts();
 
-  return (
-    <section className="min-h-screen bg-orange-50/50 px-6 py-16 md:px-12 lg:py-20">
-      <div className="mx-auto max-w-7xl">
-        {/* Page Heading */}
-        <div className="mb-12 text-center">
-          <span className="text-xs font-bold tracking-[0.25em] text-orange-600">
-            THE GOOD STUFF
-          </span>
+                if (cancelled) return;
 
-          <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
-            Our{" "}
-            <span className="text-orange-600">menu.</span>
-          </h1>
+                if (rows.length) {
+                    setItems(
+                        rows.map((product) => ({
+                            id: product.sku || product._id,
+                            name: product.name,
+                            price: product.price,
+                            category: product.category || "Popular",
+                            image: product.image,
+                            description:
+                                product.description ||
+                                "Freshly prepared and full of flavour.",
+                            emoji: product.emoji || "🍔",
+                            tag: product.active ? "Fresh" : "",
+                        }))
+                    );
 
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-gray-600 md:text-lg">
-            Made fresh, packed with flavour, and ready to
-            hit the spot.
-          </p>
-        </div>
+                    setError("");
+                }
+            } catch {
+                if (!cancelled) {
+                    setError(
+                        "Showing sample menu while the live menu is unavailable."
+                    );
+                }
+            }
+        }
 
-        {/* Menu Toolbar */}
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          {/* Category Filters */}
-          <div className="flex flex-wrap gap-3">
-            {categories.map((name) => {
-              const isSelected = category === name;
+        loadProducts();
 
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setCategory(name)}
-                  aria-pressed={isSelected}
-                  className={`rounded-full border px-5 py-2.5 text-sm font-semibold transition duration-200 ${
-                    isSelected
-                      ? "border-orange-600 bg-orange-600 text-white shadow-md shadow-orange-200"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-orange-400 hover:text-orange-600"
-                  }`}
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    // Generate available categories
+    const categories = useMemo(
+        () => [
+            "All",
+            ...new Set(
+                items.map((item) => item.category || "Popular")
+            ),
+        ],
+        [items]
+    );
+
+    // Search, filter, and sort menu items
+    const visible = useMemo(() => {
+        const searchTerm = query.trim().toLowerCase();
+
+        return items
+            .filter((item) => {
+                const matchesCategory =
+                    category === "All" || item.category === category;
+
+                const searchableText = [
+                    item.name,
+                    item.description,
+                    item.category,
+                    item.image
+                ]
+                    .join(" ")
+                    .toLowerCase();
+
+                const matchesSearch =
+                    searchableText.includes(searchTerm);
+
+                return matchesCategory && matchesSearch;
+            })
+            .sort((a, b) => {
+                switch (sort) {
+                    case "priceLow":
+                        return Number(a.price) - Number(b.price);
+
+                    case "priceHigh":
+                        return Number(b.price) - Number(a.price);
+
+                    case "name":
+                        return a.name.localeCompare(b.name);
+
+                    default:
+                        return 0;
+                }
+            });
+    }, [items, category, query, sort]);
+
+    return (
+        <div>
+            {/* Hero Section */}
+            <section className="mb-8 rounded-[2rem] bg-gradient-to-br from-orange-500 to-red-600 px-6 py-10 text-white sm:px-10">
+                <p className="text-sm font-bold uppercase tracking-[.2em] text-orange-100">
+                    Made for your cravings
+                </p>
+
+                <h1 className="mt-2 text-4xl font-black sm:text-5xl">
+                    Explore the menu.
+                </h1>
+
+                <p className="mt-3 max-w-xl text-orange-50">
+                    Find your favourite bite. Free delivery on every order.
+                </p>
+            </section>
+            
+
+            {/* Search and Sorting */}
+            <div className="mb-6 grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+                <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-950">
+                    <Search size={19} className="text-slate-400" />
+
+                    <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Search burgers, fries, wraps..."
+                        aria-label="Search menu items"
+                        className="w-full bg-transparent py-3 outline-none"
+                    />
+                </label>
+
+                <label className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 dark:border-slate-800 dark:bg-slate-950">
+                    <SlidersHorizontal size={18} />
+
+                    <select
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                        aria-label="Sort menu items"
+                        className="bg-transparent py-3 outline-none"
+                    >
+                        <option value="featured">Featured</option>
+
+                        <option value="priceLow">
+                            Price: low to high
+                        </option>
+
+                        <option value="priceHigh">
+                            Price: high to low
+                        </option>
+
+                        <option value="name">Name A–Z</option>
+                    </select>
+                </label>
+            </div>
+
+            {/* Category Filters */}
+            <div className="mb-6 flex flex-wrap gap-2">
+                {categories.map((itemCategory) => (
+                    <button
+                        key={itemCategory}
+                        type="button"
+                        onClick={() => setCategory(itemCategory)}
+                        aria-pressed={category === itemCategory}
+                        className={`rounded-full px-4 py-2 text-sm font-bold transition ${category === itemCategory
+                            ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
+                            : "border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950"
+                            }`}
+                    >
+                        {itemCategory}
+                    </button>
+                ))}
+            </div>
+
+            {/* Backend Error Notice */}
+            {error && (
+                <p
+                    role="status"
+                    className="mb-4 text-sm text-amber-700 dark:text-amber-300"
                 >
-                  {name}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search Input */}
-          <div className="flex w-full items-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 transition focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-100 lg:max-w-sm">
-            <Search
-              size={20}
-              className="shrink-0 text-gray-400"
-            />
-
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Find your favourite..."
-              aria-label="Search menu"
-              className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-                className="shrink-0 rounded-full p-1 text-gray-400 transition hover:bg-orange-50 hover:text-orange-600"
-              >
-                <X size={17} />
-              </button>
+                    {error}
+                </p>
             )}
-          </div>
+
+            {/* Product Grid */}
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {visible.map((item) => (
+                    <article
+                        key={item.id}
+                        className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-soft transition hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-950"
+                    >
+                        {/* Product Image / Emoji */}
+                        <Link
+                            to={`/menu/${item.id}`}
+                            aria-label={`View ${item.name} details`}
+                            className="flex items-center justify-center rounded-2xl bg-orange-50 text-7xl dark:bg-slate-900"
+                        >
+                            <figure className="group w-full h-60 rounded-lg overflow-hidden">
+                                {
+                                    item.image ?
+                                        <img
+                                            className="w-full h-full bg-cover object-cover group-hover:scale-110 transition-all duration-500"
+                                            src={item.image || "🍔"}
+                                            alt={item.category}
+                                        />
+                                        :
+                                        "sdncsl"
+                                }
+                            </figure>
+                        </Link>
+
+                        {/* Product Information */}
+                        <div className="mt-4 flex items-start justify-between gap-3">
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">
+                                    {item.category}
+                                </p>
+
+                                <Link
+                                    to={`/menu/${item.id}`}
+                                    className="mt-1 block text-lg font-black hover:text-brand-600"
+                                >
+                                    {item.name}
+                                </Link>
+                            </div>
+
+                            <span className="text-lg font-black">
+                                {money(item.price)}
+                            </span>
+                        </div>
+
+                        <p className="mt-2 min-h-12 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                            {item.description}
+                        </p>
+
+                        {/* Add to Cart */}
+                        <button
+                            type="button"
+                            onClick={() =>
+                                dispatch({
+                                    type: "ADD_TO_CART",
+                                    payload: item,
+                                })
+                            }
+                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-3 font-bold text-white hover:bg-brand-600"
+                        >
+                            <Plus size={18} />
+                            Add to cart
+                        </button>
+                    </article>
+                ))}
+            </div>
+
+            {/* Empty Search Results */}
+            {visible.length === 0 && (
+                <p className="py-16 text-center text-slate-500">
+                    No menu items match your search.
+                </p>
+            )}
         </div>
-
-        {/* Results Count */}
-        <div className="mb-6 flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            Showing{" "}
-            <span className="font-bold text-gray-900">
-              {filteredItems.length}
-            </span>{" "}
-            {filteredItems.length === 1 ? "item" : "items"}
-          </p>
-        </div>
-
-        {/* Product Grid */}
-        {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredItems.map((item) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
-          </div>
-        ) : (
-          /* Empty State */
-          <div className="flex min-h-80 flex-col items-center justify-center rounded-3xl border border-dashed border-orange-200 bg-white px-6 py-12 text-center">
-            <span className="text-6xl" role="img" aria-label="Takeaway box">
-              🥡
-            </span>
-
-            <h2 className="mt-5 text-2xl font-bold text-gray-900">
-              No bites found
-            </h2>
-
-            <p className="mt-2 max-w-sm text-sm leading-6 text-gray-500">
-              We couldn't find anything matching your
-              search. Try another search or category.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                setSearch("");
-                setCategory("All");
-              }}
-              className="mt-6 rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-700"
-            >
-              Show all menu items
-            </button>
-          </div>
-        )}
-      </div>
-    </section>
-  );
+    );
 }
+
+export default Menu
