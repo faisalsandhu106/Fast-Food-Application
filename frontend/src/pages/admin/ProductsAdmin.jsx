@@ -74,8 +74,8 @@ export default function ProductsAdmin() {
                     price: String(row.price ?? ""),
                     category: row.category || "Popular",
                     description: row.description || "",
-                    image: row.image || "",
                     image: row.image || "🍔",
+                    emoji: row.emoji,
                     active: row.active !== false,
                 }
                 : { ...blank }
@@ -245,29 +245,19 @@ export default function ProductsAdmin() {
                                     {/* Product Details */}
                                     <td className="px-4 py-4">
                                         <div className="flex items-center gap-3">
-                                            {/* <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50 text-2xl dark:bg-slate-900">
-                                                <img src={row.image || "🍔"} alt="" />
-                                            </span> */}
-
-                                            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-orange-50 text-2xl dark:bg-slate-900">
-                                                {row.image &&
-                                                    (row.image.startsWith("data:image/") ||
-                                                        row.image.startsWith("https://") ||
-                                                        row.image.startsWith("http://")) ? (
+                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-orange-50 text-2xl dark:bg-slate-900">
+                                                {row.image ? (
                                                     <img
                                                         src={row.image}
                                                         alt={row.name || "Product"}
-                                                        className="h-full w-full object-cover"
-                                                        onError={(e) => {
-                                                            e.currentTarget.style.display = "none";
-                                                            e.currentTarget.parentElement.textContent =
-                                                                row.emoji || "🍔";
-                                                        }}
+                                                        className="h-full w-full rounded-xl object-cover"
                                                     />
                                                 ) : (
-                                                    <span>{row.emoji || "🍔"}</span>
+                                                    <span className="text-2xl">
+                                                        {row.emoji}
+                                                    </span>
                                                 )}
-                                            </span>
+                                            </div>
 
                                             <div>
                                                 <p className="font-bold">

@@ -104,19 +104,20 @@ export default function AdminLogin() {
                 </p>
 
                 <label className="mt-6 block text-sm font-bold">
-                    Admin email
+                    Admin email <span className="text-red-500">*</span>
                     <input
                         required
                         type="email"
                         autoComplete="username"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="mt-2 w-full rounded-xl border border-slate-300 bg-transparent px-3 py-3 font-normal outline-none focus:border-brand-500 dark:border-slate-700"
+                        placeholder="Enter Your Email"
+                        className="mt-2 w-full lowercase rounded-xl border border-slate-300 bg-transparent px-3 py-3 font-normal outline-none focus:border-brand-500 dark:border-slate-700"
                     />
                 </label>
 
                 <label className="mt-4 block text-sm font-bold">
-                    Password
+                    Password <span className="text-red-500">*</span>
 
                     <input
                         required
@@ -124,7 +125,8 @@ export default function AdminLogin() {
                         autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="mt-2 w-full rounded-xl border border-slate-300 bg-transparent px-3 py-3 font-normal outline-none focus:border-brand-500 dark:border-slate-700"
+                        placeholder="Enter Your Password"
+                        className="mt-2 w-full rounded-xl border border-slate-300 bg-transparent px-3 py-3 font-normal outline-none focus:border-brand-500 dark:border-slate-700 placeholder:lowercase"
                     />
                 </label>
 

@@ -123,16 +123,16 @@ export default function Contact() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.08 * index }}
-              className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950"
+              className="flex items-start gap-4 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 p-5 dark:border-slate-800"
             >
-              <span className="rounded-xl bg-orange-100 p-3 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
-                <Icon size={20} />
+              <span className="rounded-xl bg-orange-200 p-3 text-orange-700">
+                <Icon />
               </span>
 
               <div>
-                <p className="font-black">{title}</p>
+                <p className="font-black text-white">{title}</p>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-white">
                   {body}
                 </p>
               </div>

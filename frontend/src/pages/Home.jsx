@@ -14,11 +14,11 @@ const Home = () => {
     <main>
       {/* Hero Section */}
       <section className="rounded-2xl overflow-hidden bg-orange-50 dark:bg-slate-950 transition-all duration-150">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-10 sm:py-14 lg:py-16 md:grid-cols-2 md:px-12">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 md:px-8 lg:px-12 py-10 sm:py-14 lg:py-16 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.5 }}
           >
             <span className="inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-2 text-xs font-bold tracking-widest text-orange-700">
               <span className="h-2 w-2 rounded-full bg-orange-500" />
@@ -85,21 +85,24 @@ const Home = () => {
 
           {/* Hero Visual */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             className="relative mx-auto flex aspect-square w-full max-w-lg items-center justify-center"
           >
-            <div className="absolute inset-8 rounded-full bg-orange-200" />
-
-            <div className="absolute inset-14 rounded-full border-2 border-dashed border-orange-400/60" />
-
-            <span className="relative z-10 select-none text-[150px] drop-shadow-xl sm:text-[200px]">
-              🍔
-            </span>
+            <div className="p-7 sm:p-9 md:p-8 w-72 sm:w-96 md:w-80 lg:w-96 h-72 sm:h-96 md:h-80 lg:h-96 rounded-full bg-orange-300">
+              <div className="flex items-center justify-center w-full h-full rounded-full border-2 border-dashed border-orange-600/60">
+                <span className="select-none mb-10 sm:mb-14 text-[170px] sm:text-[200px] drop-shadow-xl">
+                  🍔
+                </span>
+              </div>
+            </div>
 
             {/* Top Floating Card */}
-            <div className="absolute left-0 top-12 z-20 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-xl sm:left-2">
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute left-0 top-12 z-20 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-xl sm:left-2">
               <span className="text-3xl">🔥</span>
 
               <div>
@@ -110,10 +113,13 @@ const Home = () => {
                   Zero boring bites
                 </small>
               </div>
-            </div>
+            </motion.div>
 
             {/* Bottom Floating Card */}
-            <div className="absolute bottom-12 right-0 z-20 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-xl sm:right-2">
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-12 right-0 z-20 flex items-center gap-3 rounded-2xl bg-white p-4 shadow-xl sm:right-2">
               <span className="text-3xl text-yellow-500">
                 ★
               </span>
@@ -126,10 +132,13 @@ const Home = () => {
                   One bite says it all
                 </small>
               </div>
-            </div>
+            </motion.div>
 
             {/* Fresh Stamp */}
-            <div className="absolute bottom-3 left-8 z-20 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full border-4 border-white bg-orange-600 text-center text-xs font-bold tracking-wider text-white shadow-lg">
+            <div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-3 left-0 z-20 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full border-4 border-white bg-orange-600 text-center text-xs font-bold tracking-wider text-white shadow-lg">
               FRESH
               <b className="text-sm">& TASTY</b>
               <span className="text-lg">✳</span>
@@ -188,7 +197,7 @@ const Home = () => {
 
       {/* Final Call To Action */}
       <section className="mt-10 rounded-2xl overflow-hidden bg-orange-100 dark:bg-slate-950 transition-all duration-150">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-12 lg:pt-20">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 md:px-10 py-10 sm:py-12 lg:py-20 md:grid-cols-2">
           <div>
             <span className="text-xs font-bold tracking-widest text-orange-700">
               YOUR TABLE IS WAITING
@@ -220,13 +229,17 @@ const Home = () => {
             initial={{ opacity: 0, rotate: -15, scale: 0.8 }}
             whileInView={{ opacity: 1, rotate: 0, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.5 }}
             className="relative flex min-h-64 items-center justify-center"
           >
-            <div className="absolute h-64 w-64 rounded-full bg-orange-200 md:h-80 md:w-80" />
+            <div className="absolute h-80 w-80 rounded-full bg-orange-400 md:h-96 md:w-96" />
 
-            <span className="relative z-10 text-[150px] drop-shadow-lg md:text-[200px]">
-              🍟
+            <span className="relative w-full h-72 sm:h-64 lg:h-72 xl:h-80 2xl:h-96 drop-shadow-lg overflow-hidden">
+              <img
+                src="./image/fast-food-img.jpeg"
+                alt="Loaded Fire"
+                className='w-full h-full bg-cover object-cover hover:scale-105 transition-all duration-500'
+              />
             </span>
 
             <span className="absolute right-8 top-5 text-5xl text-orange-500">
