@@ -23,7 +23,9 @@ export default function Cart() {
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       <div className="space-y-3">
         {cart.map((item) => <article key={item.id} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-3xl dark:bg-slate-800">{item.emoji}</div>
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-3xl dark:bg-slate-800">
+            <img src={item.image} alt={item.name} />
+          </div>
           <div className="min-w-0 flex-1"><h2 className="font-bold">{item.name}</h2><p className="mt-1 text-sm text-slate-500">{money(item.price)} each</p></div>
           <div className="flex items-center gap-2">
             <button aria-label={`Decrease ${item.name}`} onClick={() => dispatch({ type: "UPDATE_QUANTITY", payload: { id: item.id, quantity: item.quantity - 1 } })} className="rounded-lg border border-slate-200 p-1.5 dark:border-slate-700"><Minus size={15} /></button>
