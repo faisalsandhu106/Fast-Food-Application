@@ -143,7 +143,7 @@ export default function ProductsAdmin() {
             );
         }
     }
-    
+
 
     return (
         <div>
@@ -337,9 +337,26 @@ export default function ProductsAdmin() {
 
                 {/* Empty State */}
                 {rows.length === 0 && (
-                    <p className="p-10 text-center text-sm text-slate-500">
-                        No products found. Try another search or add a product.
-                    </p>
+                    <div className="flex min-h-[240px] flex-col items-center justify-center gap-4 mt-5 rounded-2xl bg-white px-6 py-12 shadow-sm dark:bg-slate-900">
+                        <div className="relative flex h-14 w-14 items-center justify-center">
+                            <div className="absolute inset-0 animate-spin rounded-full border-4 border-orange-100 border-t-orange-500 dark:border-slate-700 dark:border-t-orange-400" />
+                            <span className="text-xl">🍔</span>
+                        </div>
+
+                        <div className="space-y-1 text-center">
+                            <p className="font-semibold text-slate-800 dark:text-slate-100">
+                                Loading Product
+                            </p>
+
+                            <p className="text-sm text-slate-500 dark:text-slate-400">
+                                Please wait while we fetch your latest data…
+                            </p>
+                        </div>
+
+                        <div className="h-1.5 w-36 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                            <div className="h-full w-1/2 animate-pulse rounded-full bg-orange-500" />
+                        </div>
+                    </div>
                 )}
             </div>
 

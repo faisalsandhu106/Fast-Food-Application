@@ -79,9 +79,26 @@ export default function ProductDetail() {
 
     if (!product) {
         return (
-            <p className="py-20 text-center">
-                Loading product…
-            </p>
+            <div className="flex min-h-[240px] flex-col items-center justify-center gap-4 mt-5 rounded-2xl px-6 py-20">
+                <div className="relative flex h-14 w-14 items-center justify-center">
+                    <div className="absolute inset-0 animate-spin rounded-full border-4 border-orange-100 border-t-orange-500 dark:border-slate-700 dark:border-t-orange-400" />
+                    <span className="text-xl">🍔</span>
+                </div>
+
+                <div className="space-y-1 text-center">
+                    <p className="font-semibold text-slate-800 dark:text-slate-100">
+                        Loading Detail Product
+                    </p>
+
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                        Please wait while we fetch your latest data…
+                    </p>
+                </div>
+
+                <div className="h-1.5 w-36 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div className="h-full w-1/2 animate-pulse rounded-full bg-orange-500" />
+                </div>
+            </div>
         );
     }
 
@@ -105,9 +122,8 @@ export default function ProductDetail() {
                     ) : null}
 
                     <span
-                        className={`image-fallback p-8 text-9xl ${
-                            product.image ? "hidden" : ""
-                        }`}
+                        className={`image-fallback p-8 text-9xl ${product.image ? "hidden" : ""
+                            }`}
                     >
                         {product.emoji}
                     </span>
