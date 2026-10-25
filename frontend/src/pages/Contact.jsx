@@ -144,7 +144,7 @@ export default function Contact() {
         {/* Contact Form */}
         <form
           onSubmit={submit}
-          className="space-y-4 rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 dark:border-slate-800 dark:bg-slate-950"
+          className="space-y-4 rounded-3xl border border-slate-200 bg-white p-5 sm:p-7 transition-all duration-150 dark:border-slate-800 dark:bg-slate-950"
         >
           <div className="grid gap-4 sm:grid-cols-2">
             {/* Name */}

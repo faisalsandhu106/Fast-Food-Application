@@ -37,7 +37,7 @@ const Header = () => {
                     onClick={closeMobileMenu}
                     className="flex items-center gap-2 font-black tracking-tight"
                 >
-                    <span className="rounded-xl bg-brand-500 p-2 text-white">
+                    <span className="rounded- bg-brand-500 p-2 text-white">
                         <Utensils size={20} />
                     </span>
 

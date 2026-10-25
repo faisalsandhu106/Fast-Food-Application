@@ -93,7 +93,7 @@ export default function AdminLogin() {
                 whileInView={{ x: 0 }}
                 transition={{ duration: 0.3 }}
                 onSubmit={submit}
-                className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-lg dark:border-slate-800 dark:bg-slate-950"
+                className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-lg transition-all duration-150 dark:border-slate-800 dark:bg-slate-950"
             >
                 <span className="inline-flex rounded-2xl bg-brand-500 p-3 text-white">
                     <Utensils size={24} />

@@ -241,7 +241,7 @@ export default function CustomerReviews() {
                                 }}
                                 className="box-border px-2 py-3 sm:px-3"
                             >
-                                <article className="flex h-full min-h-[320px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-150 hover:-translate-y-1 hover:border-orange-200 hover:shadow-lg dark:border-slate-800 dark:bg-slate-950 dark:hover:border-orange-500/40 sm:min-h-[340px] sm:p-6">
+                                <article className="flex h-full min-h-[300px] sm:min-h-[300px] flex-col rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm transition-all duration-150 hover:-translate-y-1 hover:border-orange-200 hover:shadow-lg dark:border-slate-800 dark:bg-slate-950 dark:hover:border-orange-500/40">
                                     <div className="mb-5 flex items-center justify-between">
                                         <div className="flex gap-1">
                                             {Array.from(

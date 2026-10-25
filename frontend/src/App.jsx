@@ -29,7 +29,6 @@ import Footer from "./components/Footer.jsx";
 
 const App = () => {
   const location = useLocation();
-
   const isAdmin = location.pathname.startsWith("/admin");
 
   return (

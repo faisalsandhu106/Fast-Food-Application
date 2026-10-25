@@ -9,7 +9,7 @@ export default function Cart() {
   const navigate = useNavigate();
 
   if (!cart.length) {
-    return <div className="mx-auto max-w-xl rounded-3xl border border-slate-200 bg-white px-6 py-14 text-center dark:border-slate-800 dark:bg-slate-950">
+    return <div className="mx-auto max-w-xl rounded-3xl border border-slate-200 bg-white px-6 py-14 text-center transition-all duration-150 dark:border-slate-800 dark:bg-slate-950">
       <ShoppingBag className="mx-auto text-brand-500" size={44} />
       <h1 className="mt-4 text-2xl font-black">Your cart is empty</h1>
       <p className="mt-2 text-slate-500">Add something delicious from our menu.</p>

@@ -102,7 +102,7 @@ export default function About() {
                   ease: "easeOut",
                 }}
                 key={value.title}
-                className="group rounded-2xl border border-gray-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl dark:border-gray-700 dark:bg-gray-950 dark:hover:border-orange-500"
+                className="group rounded-2xl border border-gray-200 bg-white p-7 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl dark:border-gray-700 dark:bg-gray-950 dark:hover:border-orange-500 transition-all duration-150"
               >
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-orange-500 transition duration-300 group-hover:bg-orange-500 group-hover:text-white dark:bg-orange-950 dark:text-orange-400 dark:group-hover:bg-orange-500 dark:group-hover:text-white">
                   <Icon size={28} strokeWidth={1.8} />
