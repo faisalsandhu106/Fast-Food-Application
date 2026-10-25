@@ -1,93 +1,6 @@
-// import {
-//     Heart,
-//     Leaf,
-//     Sparkles,
-//     Truck,
-// } from "lucide-react";
-
-// const values = [
-//     {
-//         Icon: Sparkles,
-//         title: "Big flavour, every time",
-//         description:
-//             "We build bold, satisfying fast-food favourites, from burgers and wraps to loaded sides.",
-//     },
-//     {
-//         Icon: Heart,
-//         title: "Made with care",
-//         description:
-//             "We focus on consistent quality, friendly service, and food that makes your day better.",
-//     },
-//     {
-//         Icon: Truck,
-//         title: "Delivery on us",
-//         description:
-//             "No surprise delivery fees. Enjoy free delivery and pay with cash when your order arrives.",
-//     },
-//     {
-//         Icon: Leaf,
-//         title: "Freshly prepared",
-//         description:
-//             "Orders are prepared with attention to freshness, flavour, and a great customer experience.",
-//     },
-// ];
-
-// export default function About() {
-//     return (
-//         <div className="space-y-12">
-//             {/* Hero section */}
-//             <section className="overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-14 text-white sm:px-12 sm:py-20">
-//                 <p className="text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
-//                     Our story
-//                 </p>
-
-//                 <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
-//                     Good food. Great mood.{" "}
-//                     <span className="text-orange-400">
-//                         Every bite.
-//                     </span>
-//                 </h1>
-
-//                 <p className="mt-5 max-w-2xl leading-7 text-slate-300">
-//                     Tahas Bite is built around the simple joy of
-//                     food that hits the spot — generous flavour,
-//                     easy ordering, and delivery that feels effortless.
-//                 </p>
-//             </section>
-
-//             {/* Our values */}
-//             <section
-//                 aria-label="Our values"
-//                 className="grid gap-4 sm:grid-cols-2"
-//             >
-//                 {values.map(
-//                     ({ Icon, title, description }) => (
-//                         <article
-//                             key={title}
-//                             className="rounded-3xl border border-slate-200 bg-white p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-950"
-//                         >
-//                             <span className="inline-flex rounded-2xl bg-orange-100 p-3 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
-//                                 <Icon size={24} />
-//                             </span>
-
-//                             <h2 className="mt-4 text-xl font-black">
-//                                 {title}
-//                             </h2>
-
-//                             <p className="mt-2 leading-7 text-slate-500 dark:text-slate-400">
-//                                 {description}
-//                             </p>
-//                         </article>
-//                     )
-//                 )}
-//             </section>
-//         </div>
-//     );
-// }
-
-
-
 import { Heart, Leaf, Sparkles } from "lucide-react";
+import CustomerReviews from "../components/ReviewCard";
+import { delay, motion } from "framer-motion";
 
 const values = [
   {
@@ -175,11 +88,19 @@ export default function About() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {values.map((value) => {
+          {values.map((value, index) => {
             const Icon = value.icon;
 
             return (
-              <article
+              <motion.article
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.2,
+                  ease: "easeOut",
+                }}
                 key={value.title}
                 className="group rounded-2xl border border-gray-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-orange-300 hover:shadow-xl dark:border-gray-700 dark:bg-gray-950 dark:hover:border-orange-500"
               >
@@ -194,7 +115,7 @@ export default function About() {
                 <p className="mt-3 leading-7 text-gray-600 dark:text-gray-400">
                   {value.description}
                 </p>
-              </article>
+              </motion.article>
             );
           })}
         </div>
@@ -212,6 +133,8 @@ export default function About() {
           Tahas Bite is here to make your day a little more delicious.
         </p>
       </div>
+
+      <CustomerReviews />
     </section>
   );
 }

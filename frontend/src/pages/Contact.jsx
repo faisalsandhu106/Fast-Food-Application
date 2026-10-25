@@ -9,6 +9,7 @@ import {
 
 import { sendContact } from "../api.js";
 import { motion } from "framer-motion";
+import CustomerReviews from "../components/ReviewCard.jsx";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -96,9 +97,9 @@ export default function Contact() {
     "focus:border-orange-500 dark:border-slate-700";
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto max-w-5xl xl:max-w-6xl">
       {/* Hero Section */}
-      <section className="mb-8 rounded-[2rem] bg-slate-950 px-6 py-10 text-white sm:px-10">
+      <section className="mb-8 rounded-[2rem] bg-slate-950 px-5 py-10 text-white sm:px-10">
         <p className="text-sm font-bold uppercase tracking-[.2em] text-orange-300">
           We're here for you
         </p>
@@ -233,9 +234,11 @@ export default function Contact() {
       </div>
 
       {/* Loaction Section */}
-      <section className="mt-10 mb-8 w-full h-64 sm:h-72 lg:h-96 rounded-2xl overflow-hidden">
+      <section className="mt-10 lg:mb-5 w-full h-64 sm:h-72 lg:h-96 rounded-2xl overflow-hidden">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2859.384643237726!2d73.10750667472209!3d31.423419551927136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392268153fc0774d%3A0x7af0a06c3ac14097!2sChenab%20College%20of%20Advance%20Studies!5e1!3m2!1sen!2s!4v1792613466077!5m2!1sen!2s" width="100%" height="100%" loading="lazy"></iframe>
       </section>
+
+      <CustomerReviews />
     </div>
   );
 }

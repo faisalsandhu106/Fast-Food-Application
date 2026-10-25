@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LockKeyhole, Utensils } from "lucide-react";
 
 import { adminLogin, adminTokenKey } from "../../api.js";
+import { motion } from "framer-motion";
 
 export default function AdminLogin() {
     const [email, setEmail] = useState("");
@@ -87,7 +88,10 @@ export default function AdminLogin() {
             </div>
 
             {/* Your existing form — keep it unchanged */}
-            <form
+            <motion.form
+                initial={{x: 10 }}
+                whileInView={{ x: 0 }}
+                transition={{ duration: 0.3 }}
                 onSubmit={submit}
                 className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-9 shadow-lg dark:border-slate-800 dark:bg-slate-950"
             >
@@ -156,7 +160,7 @@ export default function AdminLogin() {
                     Credentials are configured privately in the backend
                     .env file.
                 </p>
-            </form>
+            </motion.form>
         </div>
     );
 }

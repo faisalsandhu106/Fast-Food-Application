@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useApp } from '../context/AppContext';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Header = () => {
     const { cartCount, theme, setTheme } = useApp();
@@ -157,50 +157,68 @@ const Header = () => {
                 </div>
             </div>
 
+
             {/* Mobile Navigation */}
-            {mobileOpen && !isAdmin && (
-                <nav className="grid gap-1 border-t border-slate-200 px-4 py-3 dark:border-slate-800 md:hidden">
-                    <NavLink
-                        end
-                        to="/"
-                        onClick={closeMobileMenu}
-                        className={navClass}
+            <AnimatePresence>
+                {mobileOpen && !isAdmin && (
+                    <motion.nav
+                        key="mobile-navigation"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{
+                            duration: 0.3,
+                            ease: "easeInOut",
+                        }}
+                        className="overflow-hidden border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 md:hidden"
+                        aria-label="Mobile navigation"
                     >
-                        Home
-                    </NavLink>
+                        <div className="mx-auto grid max-w-7xl gap-1 px-4 py-4 sm:px-6">
+                            <NavLink
+                                end
+                                to="/"
+                                onClick={closeMobileMenu}
+                                className={navClass}
+                            >
+                                Home
+                            </NavLink>
 
-                    <NavLink
-                        to="/about"
-                        onClick={closeMobileMenu}
-                        className={navClass}
-                    >
-                        About
-                    </NavLink>
+                            <NavLink
+                                to="/about"
+                                onClick={closeMobileMenu}
+                                className={navClass}
+                            >
+                                About
+                            </NavLink>
 
-                    <NavLink
-                        to="/menu"
-                        onClick={closeMobileMenu}
-                        className={navClass}
-                    >
-                        Menu
-                    </NavLink>
+                            <NavLink
+                                to="/menu"
+                                onClick={closeMobileMenu}
+                                className={navClass}
+                            >
+                                Menu
+                            </NavLink>
 
-                    <NavLink
-                        to="/contact"
-                        onClick={closeMobileMenu}
-                        className={navClass}
-                    >
-                        Contact
-                    </NavLink>
+                            <NavLink
+                                to="/contact"
+                                onClick={closeMobileMenu}
+                                className={navClass}
+                            >
+                                Contact
+                            </NavLink>
 
-                    <NavLink
-                        to="/admin"
-                        onClick={closeMobileMenu}
-                        className={navClass}>
-                        Admin
-                    </NavLink>
-                </nav>
-            )}
+                            <NavLink
+                                to="/admin"
+                                onClick={closeMobileMenu}
+                                className={navClass}
+                            >
+                                Admin
+                            </NavLink>
+                        </div>
+                    </motion.nav>
+                )}
+            </AnimatePresence>
+
         </header>
     );
 }

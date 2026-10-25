@@ -1,9 +1,10 @@
 import React from 'react'
+import { motion } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, Flame, Leaf, Plus, ShoppingCart, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { menuItems } from "../data/menuItems.js";
 import { useApp } from "../context/AppContext.jsx";
-import { motion } from "motion/react"
+import CustomerReviews from '../components/ReviewCard.jsx';
 
 const money = (value) => `Rs. ${Number(value).toLocaleString("en-PK")}`;
 
@@ -178,8 +179,18 @@ const Home = () => {
           <Link to="/cart" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 font-semibold dark:border-slate-700"><ShoppingCart size={18} /> Cart ({cartCount})</Link>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {menuItems.map((item) => (
-            <article key={item.id} className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-soft transition hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-950">
+          {menuItems.map((item, index) => (
+            <motion.article
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.15,
+                ease: "easeOut",
+              }}
+              key={item.id}
+              className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-soft transition hover:-translate-y-1 dark:border-slate-800 dark:bg-slate-950">
               <figure className="flex h-56 items-center justify-center rounded-2xl bg-orange-50 text-7xl dark:bg-slate-800 bg-cover object-cover overflow-hidden"><img src={item.image} alt={item.category} /></figure>
               <div className="mt-4 flex items-start justify-between gap-3">
                 <div><span className="text-xs font-bold uppercase tracking-wide text-brand-600">{item.category}</span><h3 className="mt-1 text-lg font-extrabold">{item.name}</h3></div>
@@ -190,7 +201,7 @@ const Home = () => {
                 <span className="text-lg font-black">{money(item.price)}</span>
                 <button onClick={() => dispatch({ type: "ADD_TO_CART", payload: item })} className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 font-bold text-white hover:bg-brand-600"><Plus size={18} /> Add</button>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </section>
@@ -234,7 +245,7 @@ const Home = () => {
           >
             <div className="absolute h-80 w-80 rounded-full bg-orange-400 md:h-96 md:w-96" />
 
-            <span className="relative w-full h-72 sm:h-64 lg:h-72 xl:h-80 2xl:h-96 drop-shadow-lg overflow-hidden">
+            <span className="relative w-full h-72 sm:h-64 lg:h-72 xl:h-80 2xl:h-96 drop-shadow-lg rounded-2xl overflow-hidden">
               <img
                 src="./image/fast-food-img.jpeg"
                 alt="Loaded Fire"
@@ -248,6 +259,8 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      <CustomerReviews />
     </main>
   );
 }

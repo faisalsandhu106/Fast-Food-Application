@@ -160,7 +160,7 @@ const Menu = () => {
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
                         aria-label="Sort menu items"
-                        className="bg-transparent py-3 outline-none"
+                        className="bg-transparent py-3 w-full sm:w-fit outline-none"
                     >
                         <option value="featured">Featured</option>
 
